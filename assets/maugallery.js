@@ -120,80 +120,33 @@
       $(`#${lightboxId}`).modal("toggle");
     },
     prevImage() {
-      let activeImage = null;
-      $("img.gallery-item").each(function() {
-        if ($(this).attr("src") === $(".lightboxImage").attr("src")) {
-          activeImage = $(this);
-        }
-      });
-      let activeTag = $(".tags-bar span.active-tag").data("images-toggle");
-      let imagesCollection = [];
-      if (activeTag === "all") {
-        $(".item-column").each(function() {
-          if ($(this).children("img").length) {
-            imagesCollection.push($(this).children("img"));
-          }
-        });
-      } else {
-        $(".item-column").each(function() {
-          if (
-            $(this)
-              .children("img")
-              .data("gallery-tag") === activeTag
-          ) {
-            imagesCollection.push($(this).children("img"));
-          }
-        });
-      }
-      let index = 0,
-        next = null;
-
-      $(imagesCollection).each(function(i) {
-        if ($(activeImage).attr("src") === $(this).attr("src")) {
-          index = i ;
-        }
-      });
-      next =
-        imagesCollection[index] ||
-        imagesCollection[imagesCollection.length - 1];
-      $(".lightboxImage").attr("src", $(next).attr("src"));
+      let activeImage = $(".lightboxImage").attr("src");
+      let imagesCollection = this.getImagesCollection();
+      let currentIndex = imagesCollection.findIndex(img => img.attr("src") === activeImage);
+      
+      // Si l'index est 0, on revient à la dernière image
+      let nextIndex = (currentIndex === 0) ? imagesCollection.length - 1 : currentIndex - 1;
+      $(".lightboxImage").attr("src", imagesCollection[nextIndex].attr("src"));
     },
     nextImage() {
-      let activeImage = null;
-      $("img.gallery-item").each(function() {
-        if ($(this).attr("src") === $(".lightboxImage").attr("src")) {
-          activeImage = $(this);
-        }
-      });
+      let activeImage = $(".lightboxImage").attr("src");
+      let imagesCollection = this.getImagesCollection();
+      let currentIndex = imagesCollection.findIndex(img => img.attr("src") === activeImage);
+  
+      // On passe à l'image suivante
+      let nextIndex = (currentIndex === imagesCollection.length - 1) ? 0 : currentIndex + 1;
+      $(".lightboxImage").attr("src", imagesCollection[nextIndex].attr("src"));
+    },
+    getImagesCollection() {
       let activeTag = $(".tags-bar span.active-tag").data("images-toggle");
       let imagesCollection = [];
-      if (activeTag === "all") {
-        $(".item-column").each(function() {
-          if ($(this).children("img").length) {
-            imagesCollection.push($(this).children("img"));
+  
+      $(".item-column").each(function() {
+          if (activeTag === "all" || $(this).children("img").data("gallery-tag") === activeTag) {
+              imagesCollection.push($(this).children("img"));
           }
-        });
-      } else {
-        $(".item-column").each(function() {
-          if (
-            $(this)
-              .children("img")
-              .data("gallery-tag") === activeTag
-          ) {
-            imagesCollection.push($(this).children("img"));
-          }
-        });
-      }
-      let index = 0,
-        next = null;
-
-      $(imagesCollection).each(function(i) {
-        if ($(activeImage).attr("src") === $(this).attr("src")) {
-          index = i;
-        }
       });
-      next = imagesCollection[index] || imagesCollection[0];
-      $(".lightboxImage").attr("src", $(next).attr("src"));
+      return imagesCollection;
     },
     createLightBox(gallery, lightboxId, navigation) {
       gallery.append(`<div class="modal fade" id="${
