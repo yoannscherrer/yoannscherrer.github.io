@@ -190,27 +190,22 @@
     },
     filterByTag() {
       if ($(this).hasClass("active-tag")) {
-        return;
+          return;
       }
-      $(".active-tag").removeClass("active active-tag");
-      $(this).addClass("active-tag");
-
+      $(".active-tag").removeClass("active active-tag").css("background-color", ""); // Retire les styles de l'ancienne catégorie
+      $(this).addClass("active active-tag").css("background-color", "#5f5a2a"); // Ajoute la classe à la catégorie sélectionnée
+  
       var tag = $(this).data("images-toggle");
-
+  
       $(".gallery-item").each(function() {
-        $(this)
-          .parents(".item-column")
-          .hide();
-        if (tag === "all") {
-          $(this)
-            .parents(".item-column")
-            .show(300);
-        } else if ($(this).data("gallery-tag") === tag) {
-          $(this)
-            .parents(".item-column")
-            .show(300);
-        }
+          $(this).parents(".item-column").hide();
+          if (tag === "all") {
+              $(this).parents(".item-column").show(300);
+          } else if ($(this).data("gallery-tag") === tag) {
+              $(this).parents(".item-column").show(300);
+          }
       });
     }
+  
   };
 })(jQuery);

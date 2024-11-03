@@ -91,9 +91,9 @@ body {
 	font-size: 14px;
 }
 
-/*#gallery {
+#gallery {
 	min-height: 100vh; 
-} */
+} 
 .title{
 	text-align: center;
 	padding-block: 2em;
@@ -101,6 +101,7 @@ body {
 .gallery .nav {
 	justify-content: center;
 }
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
 	color: #fff;
 	background-color: #5f5a2a;
